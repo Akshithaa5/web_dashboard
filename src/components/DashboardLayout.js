@@ -8,12 +8,10 @@ const DashboardLayout = ({ children }) => {
   const { username, logout } = useContext(AuthContext); 
   const navigate = useNavigate(); 
 
-  
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
   };
 
-  
   const handleLogout = () => {
     logout(); 
     navigate('/login'); 
@@ -21,11 +19,12 @@ const DashboardLayout = ({ children }) => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      {/* Header */}
       <header className="bg-gray-800 text-white py-4 px-6 flex justify-between items-center">
         <h1 className="text-2xl font-bold">My Dashboard</h1>
 
-       
-        <div className="flex items-center relative">
+        {/* User Profile Dropdown */}
+        <div className="relative flex items-center">
           <span className="text-sm">Welcome, {username || 'User'}</span>
           <div className="w-10 h-10 rounded-full cursor-pointer ml-4">
             <img
@@ -34,11 +33,15 @@ const DashboardLayout = ({ children }) => {
               className="w-full h-full rounded-full"
             />
           </div>
-          <button onClick={toggleMenu} className="ml-2 focus:outline-none">
+          <button
+            onClick={toggleMenu}
+            className="ml-2 focus:outline-none"
+            aria-expanded={isMenuOpen ? "true" : "false"}
+          >
             <FaCaretDown className="text-white" />
           </button>
 
-         
+          {/* Dropdown Menu */}
           {isMenuOpen && (
             <div className="absolute right-0 mt-60 w-48 bg-white shadow-lg rounded-lg z-10">
               <ul className="py-2">
@@ -47,7 +50,7 @@ const DashboardLayout = ({ children }) => {
                 <li className="px-4 py-2 text-black hover:bg-gray-100 cursor-pointer">Wishlist</li>
                 <li
                   className="px-4 py-2 text-black hover:bg-gray-100 cursor-pointer"
-                  onClick={handleLogout} 
+                  onClick={handleLogout}
                 >
                   Logout
                 </li>
@@ -82,7 +85,7 @@ const DashboardLayout = ({ children }) => {
           </nav>
         </aside>
 
-       
+        {/* Main Content */}
         <main className="flex-1 p-6 bg-gray-100 overflow-y-auto">
           {children}
         </main>

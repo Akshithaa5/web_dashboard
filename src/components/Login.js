@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // Use Link for client-side routing
 import { AuthContext } from '../context/AuthContext'; 
 
 const Login = () => {
@@ -17,16 +17,17 @@ const Login = () => {
         const storedPassword = localStorage.getItem('password');
         const storedUsername = localStorage.getItem('username');
 
-        console.log("Stored Email:", storedEmail);
-        console.log("Stored Password:", storedPassword);
-        console.log("Input Email:", email);
-        console.log("Input Password:", password);
+        // Check if both fields are filled
+        if (!email || !password) {
+            setErrorMessage('Please fill in both email and password.');
+            return;
+        }
 
-        // Check if entered credentials match the stored ones
+        // Validate entered credentials against stored ones
         if (email === storedEmail && password === storedPassword) {
             setErrorMessage('');
-            login(storedUsername); // Log the user in
-            navigate('/dashboard'); 
+            login(storedUsername); // Log the user in with username
+            navigate('/dashboard'); // Redirect to dashboard
         } else {
             setErrorMessage('Invalid credentials, please try again.');
         }
@@ -38,7 +39,8 @@ const Login = () => {
                 <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
                 <input
                     className="mb-4 w-full px-3 py-2 border rounded-md focus:outline-none"
-                    type="email" // Ensure this is type="email"
+                    type="email"
+                    aria-label="Email" // Add aria-label for accessibility
                     placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -46,6 +48,7 @@ const Login = () => {
                 <input
                     className="mb-4 w-full px-3 py-2 border rounded-md focus:outline-none"
                     type="password"
+                    aria-label="Password" // Add aria-label for accessibility
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -58,9 +61,10 @@ const Login = () => {
                 </button>
                 <div className="mt-4 text-center">
                     <span className="text-sm">Don't have an account? </span>
-                    <a href="/signup" className="text-blue-500 hover:underline">
+                    {/* Use Link instead of <a> to prevent full page reload */}
+                    <Link to="/signup" className="text-blue-500 hover:underline">
                         Sign up here
-                    </a>
+                    </Link>
                 </div>
             </form>
         </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // Use Link for client-side routing
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ const Signup = () => {
   });
 
   const handleSubmit = (values) => {
-    // Set user data in local storage
+    // Set user data in local storage only if form is valid
     localStorage.setItem('email', values.email);
     localStorage.setItem('password', values.password);
     localStorage.setItem('username', values.username);
@@ -32,27 +32,68 @@ const Signup = () => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        <Form className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
-          <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
-          <Field name="username" type="text" placeholder="Username" className="mb-4 w-full px-3 py-2 border rounded-md focus:outline-none" />
-          <ErrorMessage name="username" component="div" className="text-red-500 text-sm" />
-          
-          <Field name="email" type="email" placeholder="Email" className="mb-4 w-full px-3 py-2 border rounded-md focus:outline-none" />
-          <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
+        {({ errors, touched }) => (
+          <Form className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
+            <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
 
-          <Field name="password" type="password" placeholder="Password" className="mb-4 w-full px-3 py-2 border rounded-md focus:outline-none" />
-          <ErrorMessage name="password" component="div" className="text-red-500 text-sm" />
+            {/* Username Field */}
+            <Field
+              name="username"
+              type="text"
+              aria-label="Username"
+              placeholder="Username"
+              className={`mb-4 w-full px-3 py-2 border rounded-md focus:outline-none ${errors.username && touched.username ? 'border-red-500' : ''}`}
+            />
+            <ErrorMessage name="username" component="div" className="text-red-500 text-sm" />
 
-          <Field name="confirmPassword" type="password" placeholder="Confirm Password" className="mb-4 w-full px-3 py-2 border rounded-md focus:outline-none" />
-          <ErrorMessage name="confirmPassword" component="div" className="text-red-500 text-sm" />
-          
-          <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 focus:outline-none">
-            Sign Up
-          </button>
-          <div className="mt-4 text-center">
-            <a href="/login" className="text-blue-500 hover:underline">Already have an account? Login</a>
-          </div>
-        </Form>
+            {/* Email Field */}
+            <Field
+              name="email"
+              type="email"
+              aria-label="Email"
+              placeholder="Email"
+              className={`mb-4 w-full px-3 py-2 border rounded-md focus:outline-none ${errors.email && touched.email ? 'border-red-500' : ''}`}
+            />
+            <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
+
+            {/* Password Field */}
+            <Field
+              name="password"
+              type="password"
+              aria-label="Password"
+              placeholder="Password"
+              className={`mb-4 w-full px-3 py-2 border rounded-md focus:outline-none ${errors.password && touched.password ? 'border-red-500' : ''}`}
+            />
+            <ErrorMessage name="password" component="div" className="text-red-500 text-sm" />
+
+            {/* Confirm Password Field */}
+            <Field
+              name="confirmPassword"
+              type="password"
+              aria-label="Confirm Password"
+              placeholder="Confirm Password"
+              className={`mb-4 w-full px-3 py-2 border rounded-md focus:outline-none ${errors.confirmPassword && touched.confirmPassword ? 'border-red-500' : ''}`}
+            />
+            <ErrorMessage name="confirmPassword" component="div" className="text-red-500 text-sm" />
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 focus:outline-none"
+            >
+              Sign Up
+            </button>
+
+            {/* Login Link */}
+            <div className="mt-4 text-center">
+              {/* Use Link instead of <a> for client-side navigation */}
+              <span className="text-sm">Already have an account? </span>
+              <Link to="/login" className="text-blue-500 hover:underline">
+                Login
+              </Link>
+            </div>
+          </Form>
+        )}
       </Formik>
     </div>
   );
